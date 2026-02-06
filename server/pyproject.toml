@@ -9,5 +9,6 @@ dependencies = [
     "langchain>=1.2.7",
     "langchain-community>=0.4.1",
     "langchain-openai>=1.1.7",
+    "tavily-python>=0.7.21",
     "uvicorn>=0.40.0",
 ]
