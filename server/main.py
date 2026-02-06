@@ -35,20 +35,28 @@
 # print(generate_quiz_questions(text1))
 
 
-from langchain.agents import create_agent
-from workspaces.fast_research_workspace.fast_research_llm import fast_research_planner_llm
-from workspaces.fast_research_workspace.fast_research_prompts import fast_research_planner_prompt
-from workspaces.fast_research_workspace.fast_research_state import Planner
+# from langchain.agents import create_agent
+# from workspaces.fast_research_workspace.fast_research_llm import fast_research_planner_llm
+# from workspaces.fast_research_workspace.fast_research_prompts import fast_research_planner_prompt
+# from workspaces.fast_research_workspace.fast_research_state import Planner
+#
+# agent = create_agent(
+#     fast_research_planner_llm,
+#     system_prompt=fast_research_planner_prompt,
+#     response_format=Planner
+# )
+#
+# response = agent.invoke({"messages": [{"role": "user", "content": "WHat is AGI?"}]})
+#
+# print(response['messages'][-1].content)
 
-agent = create_agent(
-    fast_research_planner_llm,
-    system_prompt=fast_research_planner_prompt,
-    response_format=Planner
-)
-
-response = agent.invoke({"messages": [{"role": "user", "content": "WHat is AGI?"}]})
-
-print(response['messages'][-1].content)
+# from workspaces.fast_research_workspace.fast_research_nodes.tools import fast_research_web_search
+# import asyncio
+# from workspaces.fast_research_workspace.fast_research_nodes.fast_research_synthesizer import get_research_output
+#
+# results = asyncio.run(fast_research_web_search("Social media’s effect on attention span and memory"))
+#
+# print(get_research_output(str(results)))
 
 # from fastapi import FastAPI
 
@@ -103,3 +111,21 @@ print(response['messages'][-1].content)
 #
 # Now design ONE beautiful, production-ready preset that perfectly matches the request.
 # Respond only with the formatted preset description.""")
+
+
+from workspaces.fast_research_workspace.fast_research_graph import fast_research_grpah, Fast_Research_Graph_State
+import asyncio
+
+
+async def main():
+    async for r in fast_research_grpah.astream(
+            Fast_Research_Graph_State(
+                user_query="Do research on langchain?",
+                response=""
+            ),
+            stream_mode="values",
+    ):
+        print(r)
+
+
+asyncio.run(main())

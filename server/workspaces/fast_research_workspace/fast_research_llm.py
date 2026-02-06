@@ -14,12 +14,20 @@ fast_research_planner_llm = ChatOpenAI(
     max_retries=2,
 )
 
-fast_research_query_expand_llm = ChatOpenAI(
-    model="openai/gpt-oss-20b",
+fast_research_synthesizer_llm1 = ChatOpenAI(
+    model="llama-3.3-70b-versatile",
     temperature=0.4,
     api_key=os.getenv("groq"),  
     base_url="https://api.groq.com/openai/v1",
     stream_usage="False",
     max_retries=2,
-    reasoning_effort="high"
+)
+
+fast_research_synthesizer_llm2 = ChatOpenAI(
+    model="llama-3.1-8b-instant",
+    temperature=0.4,
+    api_key=os.getenv("groq"),
+    base_url="https://api.groq.com/openai/v1",
+    stream_usage="False",
+    max_retries=2,
 )
