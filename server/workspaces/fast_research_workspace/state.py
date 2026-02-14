@@ -1,7 +1,7 @@
 from pydantic import BaseModel
-from typing import Any
+from typing import Any, Optional
 
 
 class Fast_Research_Graph_State(BaseModel):
     user_query: str
-    response: Any
+    response: Optional[Any] = None

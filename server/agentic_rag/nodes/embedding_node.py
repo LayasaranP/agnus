@@ -11,7 +11,7 @@ client = genai.Client(api_key=os.getenv("gemini"))
 def embeddings(text: str):
     try:
         result = client.models.embed_content(
-            model="text-embedding-004",
+            model="models/gemini-embedding-001",
             contents=text,
             config={
                 'task_type': 'RETRIEVAL_DOCUMENT',

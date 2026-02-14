@@ -1,0 +1,7 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "my_agent": "./workspaces/fast_research_workspace/fast_research_graph.py:fast_research_graph"
+  },
+  "env": ".env"
+}

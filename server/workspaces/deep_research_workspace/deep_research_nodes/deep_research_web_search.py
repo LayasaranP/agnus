@@ -1,12 +1,12 @@
 from tavily import AsyncTavilyClient
-from workspaces.fast_research_workspace.state import Fast_Research_Graph_State
+from workspaces.deep_research_workspace.deep_research_state import GraphState
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-async def fast_research_web_search(state: Fast_Research_Graph_State):
+async def fast_research_web_search(state: GraphState):
     if not state.user_query:
         return "no user query"
 
@@ -17,13 +17,14 @@ async def fast_research_web_search(state: Fast_Research_Graph_State):
     client = AsyncTavilyClient(api_key)
 
     try:
-        response = await client.search(
-            state.user_query,
-            auto_parameters=True,
-            max_results=8,
-            include_images=False,
-            include_favicon=True
-        )
+        for query in state.search_queries:
+            response = await client.search(
+                query,
+                auto_parameters=True,
+                max_results=3,
+                include_images=False,
+                include_favicon=True
+            )
 
         results = response.get('results', [])
         formatted_result = []
@@ -35,7 +36,7 @@ async def fast_research_web_search(state: Fast_Research_Graph_State):
                 "content": result["content"],
                 "website_logo": result["favicon"],
             })
-        return Fast_Research_Graph_State(
+        return GraphState(
             user_query=state.user_query,
             response=formatted_result
         )

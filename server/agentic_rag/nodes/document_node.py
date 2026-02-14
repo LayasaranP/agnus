@@ -16,12 +16,8 @@ def create_document_and_metadata(text: str) -> List:
         grouping = get_propositions_grouping(propositions)
         for i, group in enumerate(grouping):
             page_content = "".join(group)
-            summary = get_summary(group)
-            title = get_title(summary)
             metadata = {
                 "chunk_id": str(uuid.uuid4()),
-                "title": title,
-                "summary": summary,
                 "propositions": group
             }
             documents.append(
@@ -30,6 +26,6 @@ def create_document_and_metadata(text: str) -> List:
                     "values": (embeddings(page_content)).tolist(),
                     "metadata": metadata
                 })
-        return add_records(documents)
+        return documents
     except Exception as e:
         print(f"Error: {e}")
