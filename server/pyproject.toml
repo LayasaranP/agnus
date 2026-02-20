@@ -11,6 +11,8 @@ dependencies = [
     "langchain-community>=0.4.1",
     "langchain-openai>=1.1.7",
     "pinecone>=8.0.0",
+    "pymupdf>=1.27.1",
     "tavily-python>=0.7.21",
+    "upstash-vector>=0.8.0",
     "uvicorn>=0.40.0",
 ]

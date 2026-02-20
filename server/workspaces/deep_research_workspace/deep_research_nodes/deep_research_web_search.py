@@ -6,9 +6,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-async def fast_research_web_search(state: GraphState):
-    if not state.user_query:
-        return "no user query"
+async def deep_research_web_search(state: GraphState):
+    if not state["search_queries"]:
+        return "no query to search"
 
     api_key = os.getenv("tavily1")
     if not api_key:
@@ -17,29 +17,16 @@ async def fast_research_web_search(state: GraphState):
     client = AsyncTavilyClient(api_key)
 
     try:
-        for query in state.search_queries:
+        for i in state["search_queries"]:
             response = await client.search(
-                query,
+                i,
                 auto_parameters=True,
                 max_results=3,
                 include_images=False,
                 include_favicon=True
             )
 
-        results = response.get('results', [])
-        formatted_result = []
-        for i, result in enumerate(results):
-            formatted_result.append({
-                "id": i + 1,
-                "url": result["url"],
-                "title": result["title"],
-                "content": result["content"],
-                "website_logo": result["favicon"],
-            })
-        return GraphState(
-            user_query=state.user_query,
-            response=formatted_result
-        )
+            results = response.get('results', [])
 
     except Exception as e:
         print(e)

@@ -1,14 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useState, useRef, useEffect, Suspense } from "react";
 import Avatar from "@/components/ui/Avatar";
 import SettingsModal from "@/components/settings/SettingsModal";
 import { useUser } from "@/context/UserContext";
 
 export default function Navbar() {
-  const pathname = usePathname();
+  return (
+    <Suspense fallback={<nav className="h-16 bg-bg-primary border-b border-border-subtle" />}>
+      <NavbarContent />
+    </Suspense>
+  );
+}
+
+function NavbarContent() {
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get("tab") || "dashboard";
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const { user } = useUser();
 
@@ -31,10 +40,10 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
-            <NavLink href="/" label="Dashboard" active={pathname === "/"} />
-            <NavLink href="/library" label="Sources" active={pathname === "/library"} />
-            <NavLink href="/research" label="Deep Research" active={pathname.startsWith("/research")} />
-            <WorkspacesDropdown active={pathname.startsWith("/knowledge-graph") || pathname.startsWith("/decks") || pathname.startsWith("/assessment")} />
+            <NavLink href="/" label="Dashboard" active={!searchParams.get("tab") || currentTab === "dashboard"} />
+            <NavLink href="/?tab=sources" label="Sources" active={currentTab === "sources"} />
+            <NavLink href="/?tab=research" label="Deep Research" active={currentTab === "research"} />
+            <WorkspacesDropdown active={currentTab === "workspaces"} />
           </nav>
         
 
@@ -108,24 +117,51 @@ function WorkspacesDropdown({ active }) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-64 p-1 rounded-xl glass-card shadow-xl border-border-primary flex flex-col animate-fade-in origin-top-left">
+        <div className="absolute top-full left-0 mt-2 w-72 p-1 rounded-xl glass-card shadow-xl border-border-primary flex flex-col animate-fade-in origin-top-left max-h-[80vh] overflow-y-auto">
+          <div className="px-3 py-2 text-xs font-semibold text-text-muted uppercase tracking-wider">
+            Learning
+          </div>
           <DropdownItem
-            href="/knowledge-graph"
+            href="/?tab=workspaces&tool=knowledge-graph"
             icon={GraphIcon}
             label="Knowledge Graph"
             desc="Visualize neural maps"
           />
           <DropdownItem
-            href="/decks"
+            href="/?tab=workspaces&tool=decks"
             icon={DecksIcon}
             label="Flashcards"
             desc="Review & retention"
           />
           <DropdownItem
-            href="/assessment"
+            href="/?tab=workspaces&tool=assessment"
             icon={AssessmentIcon}
             label="Skill Assessment"
             desc="Test your knowledge"
+          />
+          
+          <div className="border-t border-border-subtle my-1"></div>
+          <div className="px-3 py-2 text-xs font-semibold text-text-muted uppercase tracking-wider">
+            Tools
+          </div>
+          
+          <DropdownItem
+            href="/?tab=workspaces&tool=infographic"
+            icon={InfographicIcon}
+            label="Infographic Builder"
+            desc="Create visual data"
+          />
+          <DropdownItem
+            href="/?tab=workspaces&tool=resume"
+            icon={ResumeIcon}
+            label="Resume Analyzer"
+            desc="Match job descriptions"
+          />
+          <DropdownItem
+            href="/?tab=workspaces&tool=job-searcher"
+            icon={JobIcon}
+            label="Job Searcher"
+            desc="Find opportunities"
           />
         </div>
       )}
@@ -139,7 +175,7 @@ function DropdownItem({ href, icon: Icon, label, desc }) {
       href={href}
       className="flex items-start gap-3 p-2.5 rounded-lg hover:bg-bg-tertiary transition-colors group"
     >
-      <div className="w-8 h-8 rounded-lg bg-bg-tertiary group-hover:bg-bg-elevated flex items-center justify-center text-accent-cyan transition-colors">
+      <div className="w-8 h-8 rounded-lg bg-bg-tertiary group-hover:bg-bg-elevated flex items-center justify-center text-accent-cyan transition-colors shrink-0">
         <Icon />
       </div>
       <div>
@@ -170,6 +206,31 @@ function AssessmentIcon() {
   return (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+    </svg>
+  );
+}
+
+function InfographicIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+    </svg>
+  );
+}
+
+function ResumeIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+    </svg>
+  );
+}
+
+function JobIcon() {
+  return (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
     </svg>
   );
 }

@@ -12,6 +12,7 @@ dense_index = pc.Index(host="https://agentic-study-q7lpsts.svc.aped-4627-b74a.pi
 
 def add_records(records: List):
     try:
+        print("embedded")
         info = dense_index.upsert(vectors=records, namespace="example")
         return info
 
