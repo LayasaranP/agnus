@@ -9,6 +9,7 @@ const navItems = [
   { href: "/research", label: "Deep Research", icon: ResearchIcon },
   { href: "/knowledge-graph", label: "Knowledge Graph", icon: GraphIcon },
   { href: "/decks", label: "Decks", icon: DecksIcon },
+  { href: "/workspaces", label: "Workspaces", icon: WorkspaceIcon },
 ];
 
 export default function Sidebar() {
@@ -31,7 +32,7 @@ export default function Sidebar() {
       {/* Nav links */}
       <nav className="flex-1 px-3 mt-2 space-y-1">
         {navItems.map(({ href, label, icon: Icon }) => {
-          const isActive = pathname === href;
+          const isActive = pathname.startsWith(href) && href !== "/" || pathname === href;
           return (
             <Link
               key={href}
@@ -53,7 +54,7 @@ export default function Sidebar() {
       <div className="px-5 py-4 border-t border-border-subtle">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse" />
-          <span className="text-xs text-text-muted font-mono">SYSTEM ONLINE | v.2.4.8</span>
+          <span className="text-xs text-text-muted font-mono">SYSTEM ONLINE | v.2.4.9</span>
         </div>
       </div>
     </aside>
@@ -97,6 +98,14 @@ function DecksIcon({ active }) {
   return (
     <svg className={`w-4 h-4 ${active ? "text-accent-cyan" : "text-text-muted group-hover:text-text-secondary"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3" />
+    </svg>
+  );
+}
+
+function WorkspaceIcon({ active }) {
+  return (
+    <svg className={`w-4 h-4 ${active ? "text-accent-cyan" : "text-text-muted group-hover:text-text-secondary"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
     </svg>
   );
 }

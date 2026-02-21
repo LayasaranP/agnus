@@ -1,29 +1,3 @@
-from rag.retrieval.retrieval_graph import get_response
-from rag.retrieval.retrieval_nodes.query_decompositon import get_decomposed_user_query
-from rag.retrieval.retrieval_state import Retrieval_State
-from rag.retrieval.retrieval_nodes.vector_search import get_chunks
-import asyncio
-
-r = asyncio.run(get_response("Check user did the courseworks or not and is it worth?"))
-print(r["response"])
-
-# from rag.retrieval.retrieval_nodes.vector_search import index
-# d = index.query(
-#                 data="List the skills",
-#                 include_metadata=True,
-#                 include_data=True,
-#                 include_vectors=False,
-#                 top_k=3
-#             )
-# for result in d:
-#     print(result.metadata["text"])
-# r = asyncio.run(get_chunks(Retrieval_State(
-#     user_query="List all the skills and projects",
-#     decomposed_query=[],
-#     response=""
-# )))
-# for i in r.decomposed_query:
-#     print(i)
 # from workspaces.deep_research_workspace.deep_research_memory_tracking import *
 # import uuid
 #
@@ -60,3 +34,9 @@ print(r["response"])
 # print(con)
 # print("decomposing")
 # print(asyncio.run(get_deep_research_decomposer_chain(con)))
+
+# from agentic_rag.nodes.document_node import create_document_and_metadata
+# from rag.ingestion.content_extraction import get_extracted_content_from_source
+#
+# content = get_extracted_content_from_source("1706.03762v7.pdf")
+# print(create_document_and_metadata(content))

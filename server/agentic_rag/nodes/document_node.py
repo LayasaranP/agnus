@@ -26,6 +26,6 @@ def create_document_and_metadata(text: str) -> List:
                     "values": (embeddings(page_content)).tolist(),
                     "metadata": metadata
                 })
-        return documents
+        return add_records(documents)
     except Exception as e:
         print(f"Error: {e}")

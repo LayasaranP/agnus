@@ -16,6 +16,7 @@ llm = ChatOpenAI(
     temperature=0.0,
     api_key=os.getenv("groq"),
     base_url="https://api.groq.com/openai/v1",
+    reasoning_effort="high",
     max_retries=2,
     top_p=0.95,
 )
@@ -88,4 +89,6 @@ async def get_decomposed_user_query(state: Retrieval_State):
 
     except Exception as e:
         print(f"Error occurred during decomposition: {e}")
-        return {}
+        return {
+            "error": f"Error occurred during decomposing the user query: {e}"
+        }
